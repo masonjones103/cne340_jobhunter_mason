@@ -21,7 +21,7 @@ def create_tables(cursor):
     # Python is in latin-1 and error (Incorrect string value: '\xE2\x80\xAFAbi...') will occur if Description is not in unicode format due to the json data
     cursor.execute('''CREATE TABLE IF NOT EXISTS jobs (id INT PRIMARY KEY auto_increment, Job_id varchar(50), 
     company varchar(300), Created_at date, url varchar(30000), Title varchar(100) CHARSET utf8, Description LONGBLOB, 
-    category varchar(50), job_type varchar(20), location varchar(30), salary varchar(30); ''')
+    category varchar(50), job_type varchar(20), location varchar(30), salary varchar(30)); ''')
 
 
 # Query the database.
@@ -45,15 +45,15 @@ def add_new_job(cursor, jobdetails):
 # Check if new job
 def check_if_job_exists(cursor, jobdetails):
     ##Add your code here
-    job_id = jobdetails['Job_id']
-    query = "SELECT * FROM jobs WHERE Job_id = \"%s\"" % job_id
+    job_id = jobdetails['id']
+    query = "SELECT * FROM jobs WHERE job_id = \"%s\"" % job_id
     return query_sql(cursor, query)
 
 # Deletes job
 def delete_job(cursor, jobdetails):
     ##Add your code here
-    job_id = jobdetails['Job_id']
-    query = "DELETE FROM jobs WHERE Job_id = \"%s\"" % job_id
+    job_id = jobdetails['id']
+    query = "DELETE FROM jobs WHERE job_id = \"%s\"" % job_id
     return query_sql(cursor, query)
 
 
@@ -80,11 +80,11 @@ def add_or_delete_job(jobpage, cursor):
         check_if_job_exists(cursor, jobdetails)
         is_job_found = len(cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
         if is_job_found:
-            print("Job is found: " + jobdetails["Title"] + " from " + jobdetails["company"])
+            print("Job is found: " + jobdetails["title"] + " from " + jobdetails["company_name"])
         else:
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
-            print("New job found: " + jobdetails["Title"] + " from " + jobdetails["company"])
+            print("New job found: " + jobdetails["title"] + " from " + jobdetails["company_name"])
             add_new_job(cursor, jobdetails)
 
 
